@@ -1,0 +1,393 @@
+/* Cards Plus view for Bases */
+
+.bases-plus-view {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	min-height: 0;
+}
+
+.bases-plus-scroll {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	padding: var(--size-4-2) var(--size-4-3) var(--size-4-6);
+}
+
+/* ---------------------------------------------------------------- toolbar */
+
+.bases-plus-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--size-4-1);
+	padding: var(--size-4-1) var(--size-4-3);
+	min-height: var(--input-height);
+	position: sticky;
+	top: 0;
+	z-index: 2;
+	background: var(--background-primary);
+}
+
+.bases-plus-toolbar.is-hidden {
+	display: none;
+}
+
+.bases-plus-view.is-select-mode .bases-plus-toolbar {
+	background: var(--background-secondary);
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.bases-plus-toolbar-spacer {
+	flex: 1;
+}
+
+.bases-plus-toolbar-count {
+	font-size: var(--font-ui-small);
+	font-weight: var(--font-semibold);
+	padding-inline-end: var(--size-4-2);
+}
+
+.bases-plus-toolbar-button {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--size-4-1);
+	font-size: var(--font-ui-small);
+	box-shadow: none;
+	background: transparent;
+	color: var(--text-muted);
+	padding: var(--size-2-1) var(--size-4-2);
+	height: auto;
+}
+
+.bases-plus-toolbar-button:hover:not(:disabled) {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.bases-plus-toolbar-button:disabled {
+	opacity: 0.4;
+	cursor: default;
+}
+
+.bases-plus-toolbar-button.is-danger:not(:disabled) {
+	color: var(--text-error);
+}
+
+.bases-plus-toolbar-button.is-danger:hover:not(:disabled) {
+	background: rgba(var(--color-red-rgb), 0.12);
+	color: var(--text-error);
+}
+
+.bases-plus-select-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--size-4-1);
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
+	cursor: pointer;
+	user-select: none;
+	padding-inline-end: var(--size-4-2);
+}
+
+.bases-plus-select-toggle input {
+	margin: 0;
+	cursor: pointer;
+}
+
+.bases-plus-group-select {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--size-4-1);
+	height: auto;
+	padding: var(--size-2-1) var(--size-4-2);
+	font-size: var(--font-ui-smaller);
+	color: var(--text-faint);
+	background: transparent;
+	box-shadow: none;
+}
+
+.bases-plus-group-select:hover,
+.bases-plus-group-select.is-active {
+	color: var(--text-normal);
+	background: var(--background-modifier-hover);
+}
+
+.bases-plus-group-select.is-active {
+	color: var(--text-accent);
+}
+
+.bases-plus-toolbar-icon {
+	display: inline-flex;
+}
+
+.bases-plus-toolbar-icon svg {
+	width: var(--icon-s);
+	height: var(--icon-s);
+}
+
+@media (max-width: 600px) {
+	.bases-plus-view.is-select-mode .bases-plus-toolbar-label {
+		display: none;
+	}
+}
+
+/* ----------------------------------------------------------------- groups */
+
+.bases-plus-group + .bases-plus-group {
+	margin-top: var(--size-4-4);
+}
+
+.bases-plus-group-header {
+	display: flex;
+	align-items: center;
+	gap: var(--size-4-2);
+	margin-bottom: var(--size-4-2);
+}
+
+.bases-plus-group-title {
+	font-weight: var(--font-semibold);
+	font-size: var(--bases-plus-group-header-size, var(--font-text-size));
+	line-height: var(--line-height-tight);
+}
+
+.bases-plus-group-collapse {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-inline-start: calc(-1 * var(--size-4-1));
+	color: var(--text-faint);
+}
+
+.bases-plus-group-collapse svg {
+	transition: transform 120ms ease;
+}
+
+.bases-plus-group.is-collapsed .bases-plus-group-collapse svg {
+	transform: rotate(-90deg);
+}
+
+.bases-plus-group.is-collapsed .bases-plus-grid {
+	display: none;
+}
+
+.bases-plus-group.is-collapsed .bases-plus-group-header {
+	margin-bottom: 0;
+}
+
+.bases-plus-group-title.is-renamable {
+	cursor: text;
+	border-radius: var(--radius-s);
+	padding: 0 var(--size-2-2);
+	margin-inline-start: calc(-1 * var(--size-2-2));
+}
+
+.bases-plus-group-title.is-renamable:hover {
+	background: var(--background-modifier-hover);
+}
+
+.bases-plus-group-title.is-renamable * {
+	pointer-events: none;
+}
+
+.bases-plus-group-rename {
+	font: inherit;
+	font-weight: var(--font-semibold);
+	height: auto;
+	padding: 0 var(--size-2-2);
+	pointer-events: auto;
+}
+
+.bases-plus-group-count {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-faint);
+}
+
+.bases-plus-empty {
+	color: var(--text-faint);
+	text-align: center;
+	padding: var(--size-4-8);
+}
+
+/* ------------------------------------------------------------------ cards */
+
+.bases-plus-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(var(--bases-plus-card-size, 200px), 100%), 1fr));
+	gap: var(--bases-plus-card-gap, var(--size-4-3));
+}
+
+.bases-plus-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-m);
+	background: var(--background-primary);
+	overflow: hidden;
+	cursor: var(--cursor-link, pointer);
+	/* Skip layout/paint of offscreen cards in large bases. */
+	content-visibility: auto;
+	contain-intrinsic-size: auto 260px;
+	transition: border-color 100ms ease, box-shadow 100ms ease;
+}
+
+.bases-plus-card:hover {
+	border-color: var(--background-modifier-border-hover);
+	box-shadow: var(--shadow-s);
+}
+
+.bases-plus-card-cover {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 1 / var(--bases-plus-image-ratio, 1);
+	background-color: var(--background-secondary);
+	overflow: hidden;
+	flex-shrink: 0;
+}
+
+.bases-plus-card-cover img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.bases-plus-card-cover.is-contain img {
+	object-fit: contain;
+}
+
+.bases-plus-card-body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-2);
+	padding: var(--size-4-2) var(--size-4-3) var(--size-4-3);
+	min-width: 0;
+}
+
+.bases-plus-card-title {
+	font-weight: var(--font-semibold);
+	color: var(--text-normal);
+	line-height: var(--line-height-tight);
+	overflow-wrap: anywhere;
+}
+
+.bases-plus-view.has-title-clamp .bases-plus-card-title {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: var(--bases-plus-title-lines, 2);
+	line-clamp: var(--bases-plus-title-lines, 2);
+	overflow: hidden;
+}
+
+.bases-plus-card-property {
+	min-width: 0;
+}
+
+.bases-plus-card-label {
+	font-size: var(--font-ui-smaller);
+	color: var(--text-faint);
+	margin-bottom: 2px;
+}
+
+.bases-plus-card-value {
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
+	overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------- image fills card */
+
+/* The cover sets the card's size; the body is laid over it and revealed on hover. */
+.bases-plus-view.has-image-overlay .bases-plus-card-body {
+	position: absolute;
+	inset: auto 0 0 0;
+	z-index: 1;
+	/* On small cards the info can be taller than the image: scroll it, starting at the title. */
+	max-height: 100%;
+	overflow-y: auto;
+	scrollbar-width: none;
+	padding-top: var(--size-4-8);
+	background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.6) 60%, transparent 100%);
+	/* Light text on the dark overlay, whatever the theme. */
+	--text-normal: #fff;
+	--text-muted: rgba(255, 255, 255, 0.85);
+	--text-faint: rgba(255, 255, 255, 0.65);
+	color: var(--text-normal);
+	opacity: 0;
+	transform: translateY(16px);
+	transition:
+		opacity 350ms ease,
+		transform 350ms ease;
+}
+
+/* Keep items at full height so the body scrolls rather than squashing the (clamped) title. */
+.bases-plus-view.has-image-overlay .bases-plus-card-body > * {
+	flex-shrink: 0;
+}
+
+/* Dims the whole image while the info is shown. */
+.bases-plus-view.has-image-overlay .bases-plus-card-cover::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.35);
+	opacity: 0;
+	transition: opacity 350ms ease;
+}
+
+.bases-plus-view.has-image-overlay .bases-plus-card:is(:hover, :focus-within) .bases-plus-card-body,
+.bases-plus-view.has-image-overlay .bases-plus-card:has(.bases-plus-card-cover.is-empty) .bases-plus-card-body {
+	opacity: 1;
+	transform: none;
+}
+
+.bases-plus-view.has-image-overlay .bases-plus-card:is(:hover, :focus-within) .bases-plus-card-cover::after {
+	opacity: 1;
+}
+
+/* Touch screens have no hover: keep the info visible. */
+@media (hover: none) {
+	.bases-plus-view.has-image-overlay .bases-plus-card-body {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.bases-plus-view.has-image-overlay .bases-plus-card-body {
+		transform: none;
+		transition: opacity 150ms ease;
+	}
+}
+
+/* ------------------------------------------------------------- selection */
+
+/* In select mode, a click anywhere on the card toggles it. */
+.bases-plus-view.is-select-mode .bases-plus-card * {
+	pointer-events: none;
+}
+
+.bases-plus-view.is-select-mode .bases-plus-card {
+	user-select: none;
+}
+
+.bases-plus-card.is-selected {
+	border-color: var(--interactive-accent);
+	box-shadow: 0 0 0 1px var(--interactive-accent);
+}
+
+/* ---------------------------------------------------------------- modals */
+
+.bases-plus-modal-error {
+	color: var(--text-error);
+	font-size: var(--font-ui-small);
+	min-height: 1em;
+}
+
+.bases-plus-property-list {
+	max-height: 50vh;
+	overflow-y: auto;
+}

@@ -1,0 +1,10 @@
+{
+	"id": "bases-plus",
+	"name": "Bases Plus",
+	"version": "0.1.0",
+	"minAppVersion": "1.13.0",
+	"description": "Adds a Cards Plus view to Bases: a card layout with extra features.",
+	"author": "YU",
+	"authorUrl": "",
+	"isDesktopOnly": false
+}
